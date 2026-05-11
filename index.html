@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pando · Due Diligence Request List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ---------- Pando brand tokens ---------- */
+:root{
+  --navy:#0d1f36;
+  --navy2:#1a3a5c;
+  --teal:#2ec4b6;
+  --teal-l:#e4f7f5;
+  --amber:#f4a621;
+  --amber-l:#fef3e2;
+  --blue-l:#e8f0f8;
+  --gray-l:#f2f5f8;
+  --divider:#d4dde8;
+  --mid:#8493a8;
+  --dark:#1a2b40;
+  --white:#ffffff;
+
+  --status-none:#cbd5e1;
+  --status-progress:#f4a621;
+  --status-done:#2ec4b6;
+  --status-na:#8493a8;
+
+  --shadow-sm:0 1px 2px rgba(13,31,54,.04), 0 1px 1px rgba(13,31,54,.03);
+  --shadow-md:0 4px 14px rgba(13,31,54,.07), 0 2px 4px rgba(13,31,54,.04);
+
+  --header-h:72px;
+  --sidebar-w:280px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Poppins', system-ui, -apple-system, sans-serif;
+  font-weight:400;
+  color:var(--dark);
+  background:var(--gray-l);
+  -webkit-font-smoothing:antialiased;
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* ---------- Header ---------- */
+.header{
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);
+  background:var(--navy);
+  color:#fff;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;
+  z-index:100;
+  border-bottom:3px solid var(--teal);
+}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{
+  width:38px;height:38px;border-radius:9px;
+  background:linear-gradient(135deg,var(--teal) 0%, #25a89d 100%);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:18px;letter-spacing:-.5px;
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
+.brand-text .name{font-weight:700;font-size:15px;letter-spacing:.3px}
+.brand-text .tag{font-size:10px;color:#8aaccc;letter-spacing:1.2px;text-transform:uppercase;margin-top:2px}
+
+.header-center{display:flex;align-items:center;gap:18px}
+.progress-wrap{display:flex;align-items:center;gap:12px}
+.progress-track{
+  width:240px;height:8px;background:rgba(255,255,255,.12);
+  border-radius:4px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--teal) 0%, #5ad4c8 100%);
+  width:0%;
+  transition:width .35s ease;
+}
+.progress-text{font-size:12px;color:#bfd1e3;font-weight:500;min-width:78px}
+
+.header-actions{display:flex;align-items:center;gap:10px}
+.btn{
+  font-family:inherit;font-weight:500;font-size:13px;
+  padding:8px 16px;border-radius:8px;border:none;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;
+  transition:all .15s ease;
+}
+.btn-primary{background:var(--teal);color:#fff}
+.btn-primary:hover{background:#25a89d;transform:translateY(-1px)}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff}
+.btn-ghost:hover{background:rgba(255,255,255,.15)}
+.btn-amber{background:var(--amber);color:#0d1f36}
+.btn-amber:hover{background:#dc9015}
+
+/* ---------- Layout ---------- */
+.layout{
+  display:flex;
+  margin-top:var(--header-h);
+  min-height:calc(100vh - var(--header-h));
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  width:var(--sidebar-w);
+  background:#fff;
+  border-right:1px solid var(--divider);
+  position:fixed;
+  top:var(--header-h);bottom:0;left:0;
+  overflow-y:auto;
+  padding:18px 0;
+}
+.sidebar-title{
+  font-size:10px;font-weight:700;letter-spacing:1.6px;
+  color:var(--mid);text-transform:uppercase;
+  padding:0 24px 12px;
+}
+.nav-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 24px;
+  cursor:pointer;
+  border-left:3px solid transparent;
+  transition:background .12s ease;
+  position:relative;
+}
+.nav-item:hover{background:var(--gray-l)}
+.nav-item.active{
+  background:var(--teal-l);
+  border-left-color:var(--teal);
+}
+.nav-item.active .nav-label{color:var(--navy);font-weight:600}
+.nav-left{display:flex;align-items:center;gap:12px;min-width:0}
+.nav-num{
+  font-size:10px;color:var(--mid);font-weight:600;
+  min-width:18px;
+}
+.nav-label{
+  font-size:13px;color:var(--dark);font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.nav-pill{
+  font-size:10px;font-weight:600;
+  background:var(--gray-l);color:var(--mid);
+  padding:2px 8px;border-radius:10px;
+  min-width:32px;text-align:center;
+}
+.nav-pill.complete{background:var(--teal-l);color:#1a857a}
+.nav-pill.partial{background:var(--amber-l);color:#a96a0a}
+
+.sidebar-divider{height:1px;background:var(--divider);margin:14px 24px}
+.summary-nav{
+  margin:0 16px;padding:12px 14px;
+  background:linear-gradient(135deg,var(--navy) 0%, var(--navy2) 100%);
+  border-radius:10px;color:#fff;
+  cursor:pointer;
+  transition:transform .15s ease;
+}
+.summary-nav:hover{transform:translateY(-1px)}
+.summary-nav.active{box-shadow:0 0 0 2px var(--teal)}
+.summary-nav .label{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#8aaccc;font-weight:600}
+.summary-nav .title{font-size:14px;font-weight:600;margin-top:3px}
+
+/* ---------- Main ---------- */
+.main{
+  margin-left:var(--sidebar-w);
+  flex:1;
+  padding:32px 40px 80px;
+  max-width:1100px;
+}
+
+/* ---------- Section header ---------- */
+.section-eyebrow{
+  font-size:11px;letter-spacing:1.8px;text-transform:uppercase;
+  color:var(--teal);font-weight:700;
+}
+.section-title{
+  font-size:30px;font-weight:700;color:var(--navy);
+  margin:6px 0 4px;letter-spacing:-.5px;
+}
+.section-sub{
+  font-size:14px;color:var(--mid);font-weight:400;
+  margin-bottom:22px;
+}
+
+.section-meta{
+  display:flex;align-items:center;gap:24px;
+  padding:14px 18px;background:#fff;
+  border:1px solid var(--divider);border-radius:10px;
+  margin-bottom:24px;
+  box-shadow:var(--shadow-sm);
+}
+.meta-stat{display:flex;align-items:center;gap:8px}
+.meta-dot{width:8px;height:8px;border-radius:50%}
+.meta-dot.done{background:var(--status-done)}
+.meta-dot.progress{background:var(--status-progress)}
+.meta-dot.na{background:var(--status-na)}
+.meta-dot.none{background:var(--status-none)}
+.meta-label{font-size:12px;color:var(--mid);font-weight:500}
+.meta-value{font-size:13px;color:var(--dark);font-weight:600}
+
+/* ---------- Item card ---------- */
+.items{display:flex;flex-direction:column;gap:14px}
+.item{
+  background:#fff;
+  border:1px solid var(--divider);
+  border-left:4px solid var(--status-none);
+  border-radius:10px;
+  padding:18px 20px;
+  box-shadow:var(--shadow-sm);
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+.item:hover{box-shadow:var(--shadow-md)}
+.item.status-progress{border-left-color:var(--status-progress)}
+.item.status-done{border-left-color:var(--status-done)}
+.item.status-na{border-left-color:var(--status-na)}
+
+.item-top{display:flex;gap:14px;align-items:flex-start}
+.item-num{
+  font-size:11px;font-weight:600;color:var(--mid);
+  background:var(--gray-l);
+  padding:4px 9px;border-radius:6px;
+  flex-shrink:0;margin-top:2px;
+  font-variant-numeric:tabular-nums;
+}
+.item-label{
+  flex:1;
+  font-size:14px;font-weight:500;color:var(--dark);
+  line-height:1.55;
+}
+.item-label ul{margin:6px 0 0 18px;padding:0;color:var(--mid);font-weight:400;font-size:13px}
+.item-label ul li{margin:2px 0}
+
+.item-controls{
+  display:grid;
+  grid-template-columns: 200px 1fr 1fr;
+  gap:12px;
+  margin-top:14px;
+  padding-left:44px;
+}
+
+.field{display:flex;flex-direction:column}
+.field-label{
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--mid);font-weight:600;margin-bottom:5px;
+}
+
+.status-select{
+  appearance:none;
+  font-family:inherit;font-size:13px;font-weight:500;
+  padding:8px 32px 8px 12px;
+  border:1px solid var(--divider);border-radius:7px;
+  background:#fff;
+  cursor:pointer;
+  color:var(--dark);
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%238493a8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+.status-select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-l)}
+
+.status-select.s-progress{background-color:var(--amber-l);border-color:#f4a621;color:#8a5a0c;font-weight:600}
+.status-select.s-done{background-color:var(--teal-l);border-color:var(--teal);color:#1a857a;font-weight:600}
+.status-select.s-na{background-color:#eef1f5;border-color:#cbd5e1;color:#4a5566;font-weight:600}
+
+.text-input, .notes-input{
+  font-family:inherit;font-size:13px;
+  padding:8px 12px;
+  border:1px solid var(--divider);border-radius:7px;
+  background:#fff;
+  color:var(--dark);
+  width:100%;
+  resize:none;
+}
+.text-input:focus, .notes-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-l)}
+.notes-input{min-height:36px;line-height:1.4;font-family:inherit}
+
+/* ---------- Cover / Summary view ---------- */
+.cover{
+  background:linear-gradient(135deg,var(--navy) 0%, var(--navy2) 100%);
+  color:#fff;
+  border-radius:14px;
+  padding:36px 40px;
+  margin-bottom:28px;
+  position:relative;overflow:hidden;
+}
+.cover::after{
+  content:"";position:absolute;right:-60px;top:-60px;
+  width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle, rgba(46,196,182,.25) 0%, transparent 70%);
+}
+.cover-eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);font-weight:600}
+.cover h1{font-size:32px;font-weight:700;margin:8px 0 6px;letter-spacing:-.6px}
+.cover p{color:#bfd1e3;font-size:14px;font-weight:300;max-width:680px;line-height:1.55;margin:0}
+
+.client-card{
+  background:#fff;border:1px solid var(--divider);
+  border-radius:12px;padding:22px 24px;
+  margin-bottom:24px;
+  box-shadow:var(--shadow-sm);
+}
+.client-card-title{font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:14px}
+.client-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.client-field label{display:block;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);font-weight:600;margin-bottom:5px}
+.client-field input{
+  font-family:inherit;font-size:14px;
+  padding:9px 13px;border:1px solid var(--divider);border-radius:7px;
+  background:#fff;color:var(--dark);width:100%;
+}
+.client-field input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-l)}
+
+.summary-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.kpi{
+  background:#fff;border:1px solid var(--divider);
+  border-radius:10px;padding:18px 20px;
+  box-shadow:var(--shadow-sm);
+}
+.kpi-label{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--mid);font-weight:600}
+.kpi-value{font-size:28px;font-weight:700;color:var(--navy);margin-top:4px;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.kpi-sub{font-size:11px;color:var(--mid);margin-top:2px}
+.kpi.accent-teal .kpi-value{color:var(--teal)}
+.kpi.accent-amber .kpi-value{color:#c98208}
+.kpi.accent-na .kpi-value{color:var(--mid)}
+
+.summary-table{
+  background:#fff;border:1px solid var(--divider);
+  border-radius:12px;overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  margin-bottom:24px;
+}
+.summary-table-header{
+  background:var(--navy);color:#fff;
+  display:grid;grid-template-columns:38px 1fr 80px 80px 80px 80px 110px;
+  padding:12px 18px;
+  font-size:10px;letter-spacing:1.2px;text-transform:uppercase;font-weight:600;
+  align-items:center;
+}
+.summary-row{
+  display:grid;grid-template-columns:38px 1fr 80px 80px 80px 80px 110px;
+  padding:12px 18px;
+  border-top:1px solid var(--divider);
+  font-size:13px;align-items:center;
+  cursor:pointer;
+  transition:background .12s ease;
+}
+.summary-row:hover{background:var(--gray-l)}
+.summary-row .num{color:var(--mid);font-size:11px;font-weight:600}
+.summary-row .name{font-weight:500;color:var(--dark)}
+.summary-row .cell-num{text-align:center;font-variant-numeric:tabular-nums;color:var(--dark);font-weight:500}
+.summary-row .cell-num.zero{color:#cbd5e1;font-weight:400}
+.summary-row .bar-wrap{display:flex;align-items:center;gap:8px}
+.summary-row .bar-track{flex:1;height:7px;background:var(--gray-l);border-radius:4px;overflow:hidden}
+.summary-row .bar-fill{height:100%;background:var(--teal);border-radius:4px;transition:width .35s ease}
+.summary-row .bar-pct{font-size:11px;color:var(--mid);font-weight:600;font-variant-numeric:tabular-nums;min-width:32px;text-align:right}
+
+.bottom-banner{
+  background:var(--navy);color:#fff;
+  border-radius:12px;
+  padding:18px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:28px;
+}
+.bottom-banner .left{display:flex;align-items:center;gap:14px}
+.bb-mark{width:34px;height:34px;border-radius:8px;background:var(--teal);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px}
+.bb-text{font-size:13px}
+.bb-text strong{display:block;font-weight:600}
+.bb-text span{color:#8aaccc;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+
+/* ---------- Footer / utility ---------- */
+.section-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:32px;padding-top:24px;border-top:1px solid var(--divider);
+}
+.btn-nav{
+  background:#fff;border:1px solid var(--divider);
+  color:var(--dark);padding:10px 18px;border-radius:8px;
+  font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;
+  transition:all .15s ease;
+}
+.btn-nav:hover:not(:disabled){border-color:var(--teal);color:var(--teal)}
+.btn-nav:disabled{opacity:.4;cursor:not-allowed}
+
+/* ---------- Print ---------- */
+@media print{
+  .header,.sidebar,.section-footer,.btn,.bottom-banner{display:none !important}
+  body{background:#fff}
+  .layout{margin-top:0}
+  .main{margin-left:0;max-width:none;padding:24px 32px}
+  .item{break-inside:avoid;page-break-inside:avoid;box-shadow:none;border:1px solid #d4dde8}
+  .cover{break-after:page;page-break-after:always}
+  .client-card,.summary-kpis,.summary-table{break-inside:avoid}
+  .section-view{break-before:page;page-break-before:always}
+  .section-view:first-of-type{break-before:auto;page-break-before:auto}
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:980px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s ease;z-index:50;box-shadow:var(--shadow-md)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:20px}
+  .item-controls{grid-template-columns:1fr;padding-left:0}
+  .client-grid,.summary-kpis{grid-template-columns:1fr 1fr}
+  .header-center{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============== HEADER ============== -->
+<div class="header">
+  <div class="brand">
+    <div class="brand-mark">P</div>
+    <div class="brand-text">
+      <div class="name">Pando Consulting Group</div>
+      <div class="tag">Due Diligence Request List</div>
+    </div>
+  </div>
+  <div class="header-center">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="globalProgressFill"></div></div>
+      <div class="progress-text" id="globalProgressText">0 of 0</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-ghost" onclick="resetAll()" title="Clear all responses">↺ Reset</button>
+    <button class="btn btn-ghost" onclick="exportJSON()" title="Download current responses">⬇ Export</button>
+    <button class="btn btn-amber" onclick="window.print()" title="Print or save as PDF">🖨 Print / PDF</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- ============== SIDEBAR ============== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="summary-nav" id="navSummary" onclick="showSummary()">
+      <div class="label">Overview</div>
+      <div class="title">Summary & Client Info</div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-title">Request Sections</div>
+    <div id="navList"></div>
+  </aside>
+
+  <!-- ============== MAIN ============== -->
+  <main class="main" id="main"></main>
+
+</div>
+
+<script>
+/* ============================================================
+   DATA — 19 sections, deduplicated from REAG source
+   ============================================================ */
+const SECTIONS = [
+  {
+    id:"general", title:"General",
+    items:[
+      "Organizational chart and management structure",
+      "Charter documents, operating agreements, by-laws, business licenses, certificates of authority and stock certificates",
+      "Board actions and minutes",
+      "Information and documentation on joint ventures, acquisition and/or disposals of subsidiaries, affiliates or major assets of the company (last five years)",
+      "Articles of Incorporation and any amendments",
+      "List of company bylaws and amendments",
+      "List of company assumed names",
+      "List of all states or countries where the company does business, has employees or owns/leases an asset",
+      "List of all shareholders and percentages owned",
+      "Certificate of Good Standing from each Secretary of State where the company does business"
+    ]
+  },
+  {
+    id:"facilities", title:"Facilities",
+    items:[
+      "Listings of all owned and/or leased property and locations",
+      "Copies of deeds, mortgages, real estate leases, title policies and zoning approvals",
+      "Details on any facility turnarounds (last five years)",
+      "Details on any facility openings or closings (last five years)"
+    ]
+  },
+  {
+    id:"products", title:"Products & Services",
+    items:[
+      "List of products and services offered",
+      "List of products and services in development",
+      "Correspondence and documents related to the regulatory approval of product lines",
+      "List of major customers and product applications",
+      "Tests, evaluations, studies and surveys about products or services under development"
+    ]
+  },
+  {
+    id:"finance", title:"Finance",
+    items:[
+      "Internal and external audits and work papers (last five years and YTD)",
+      "Audit inquiry responses and opinion letters from legal counsel (past three years)",
+      "Consolidated financials (last five years and YTD)",
+      "Consolidated quarterly financials (last five years and YTD)",
+      "Trial balances (last five years and YTD)",
+      "Description of any off-balance sheet commitments",
+      "Description of any contingent liabilities",
+      "Price and volume data by division and product annually",
+      "Annual P&L (last five years and YTD)",
+      "Locations of accounting records and personnel",
+      "Accounting policies and procedures",
+      "Details on raw materials",
+      "Details on cash balances including cash in different jurisdictions and accounts",
+      "Details on any restructuring efforts — costs, timing, rationale and P&L impact (historical and projected)",
+      "Details on new product initiatives — strategy, cost and P&L impact",
+      "Detailed CAPEX schedule — breakout between maintenance, growth, and new products and acquisitions (last three years and YTD)",
+      "Annual profitability by customer (last five years and YTD)",
+      "Annual breakdown of sales, volume and gross margin by product, by region and by customer",
+      "Historical accounts receivable schedule",
+      "Most up-to-date A/R aging",
+      "Details on any recognized bad debt expense, write-offs and recoveries",
+      "Breakdown of cost of goods sold",
+      "SG&A details",
+      "List of non-operational expenses",
+      "Business plan or most recent forecast, including projections for five years"
+    ]
+  },
+  {
+    id:"inventories", title:"Inventories",
+    items:[
+      "Summary of the composition of inventory for the last five years",
+      "List of products as at the most recent balance sheet date",
+      "List of inventory including the result of the last physical count, reconciled with the accounting balance at the date of the physical count",
+      "Details of any inventories maintained offsite",
+      "Breakdown of inventory by classification (finished goods, WIP, raw materials)",
+      "Inventory aging"
+    ]
+  },
+  {
+    id:"banks", title:"Banks & Financing",
+    items:[
+      "List of all banks with which the company maintains financial and commercial relations",
+      "Detailed debt schedule",
+      "Promissory notes",
+      "Equipment / other lease agreements",
+      "Bank reconciliations (past three years)"
+    ]
+  },
+  {
+    id:"fixed-assets", title:"Fixed Assets",
+    items:[
+      "Summary schedule showing the composition of the company's fixed assets",
+      "Schedule showing owned and leased assets",
+      "Detailed fixed asset and depreciation schedule",
+      "List of leased equipment",
+      "List of major equipment sales and purchases over the past three years"
+    ]
+  },
+  {
+    id:"customers", title:"Customers",
+    items:[
+      "List of top 25 customers for the past three years",
+      "List of sales from top 25 customers over the past three years",
+      "Details on customers — number, length of relationships, concentrations",
+      "Customer terms and credit limits",
+      "Average customer purchase amounts",
+      "Current and historical backlogs",
+      "Status of relationships with major customers"
+    ]
+  },
+  {
+    id:"suppliers", title:"Suppliers",
+    items:[
+      "List of suppliers with open balances at the most recent balance sheet date",
+      "List of overdue payable amounts at the most recent balance sheet date",
+      "List of suppliers in total, by region and by end product",
+      "List of top suppliers' terms",
+      "Most up-to-date A/P aging"
+    ]
+  },
+  {
+    id:"competitors", title:"Competitors",
+    items:[
+      "List of significant competitors by end-market and region",
+      "Pricing trends / behavior by key competitors",
+      "Description of competitors — strengths, weaknesses, market position and basis of competition"
+    ]
+  },
+  {
+    id:"sales-marketing", title:"Sales & Marketing",
+    items:[
+      "Sales strategy and compensation structure associated with each channel",
+      "Business development process — how opportunities are identified, how bids are determined, etc.",
+      "List of articles and press releases about the company within the last three years",
+      "Description of major marketing channels and expenditures",
+      "Current ad programs, marketing budgets and printed marketing materials",
+      "List of customer complaints and resolutions",
+      "Incentive compensation plan(s) for sales team",
+      "Research on methods / plans to obtain new business",
+      "Lead sourcing and customer management processes",
+      "List of all websites used and URL expiration dates",
+      "Tracking of new business opportunities"
+    ]
+  },
+  {
+    id:"operations", title:"Operations",
+    items:[
+      "Workflow of operations",
+      "Schedule of unfilled orders",
+      "Monthly manufacturing yields",
+      "Products returned by customer for the past five years",
+      "Key Performance Indicators (KPI) (last five years and YTD)"
+    ]
+  },
+  {
+    id:"contracts", title:"Contracts",
+    items:[
+      "Material supply and sourcing contracts",
+      "Material customer contracts",
+      "All nondisclosure and noncompete agreements",
+      "List of mortgages, collateral pledges, indentures and security agreements",
+      "Contracts, transcripts or letters of divestitures from any merger or acquisition within the past five years",
+      "Exclusivity agreements",
+      "Indemnification agreements",
+      "Copies of federal, state and local licenses, permits and consent forms",
+      "Loan agreements, credit lines, IRBs, derivatives, letters of credit, promissory notes, security agreements, financing details, guarantees, equipment leases and other financing documents"
+    ]
+  },
+  {
+    id:"labor", title:"Labor Relations",
+    items:[
+      "Employee agreements, applications for employment, hire letters and descriptions of oral/informal promises or commitments regarding terms of employment",
+      "Payrolls, together with general summary (last five years and YTD)",
+      "Employees by location, department, salaried vs hourly, union vs nonunion, and current compensation and employment",
+      "Employee headcount by location and function (last five years and YTD)",
+      "Resumes, history and experience of key employees, including senior management",
+      "Layoff and severance package information",
+      "List of harassment, wrongful termination and discrimination disputes within the past five years"
+    ]
+  },
+  {
+    id:"taxes", title:"Taxes",
+    items:[
+      "All applicable tax returns filed for the last five years (federal, state, local, property and foreign)",
+      "Detailed explanations of general accounting principles",
+      "Details on any deferred tax assets and liabilities",
+      "Details on any non-deductible expenses",
+      "Reconciliation from marginal to effective tax rate",
+      "Nature and location of assets of the corporation and their respective fair market values and tax bases",
+      "Federal or state tax audits and supplementary materials",
+      "Schedule of financing for debt and equity",
+      "Property taxes paid for past three years",
+      "List of any tax liens",
+      "IRS Form 5500 for 401(k) plans",
+      "Excise tax filings for the past five years",
+      "All audit reports and employment tax filings for the past five years",
+      "Tax settlement documents over the past three years",
+      "List of undisclosed tax liabilities",
+      "International income tax planning, strategy, analysis and advice received"
+    ]
+  },
+  {
+    id:"environmental", title:"Environmental",
+    items:[
+      "Copies of environmental audits and compliance reports for each company property",
+      "List describing or identifying any environmental liabilities or contingencies",
+      "Any completed environmental studies",
+      "Environmental liabilities and valuation",
+      "Prior ownership of facilities",
+      "Costs for environmental compliance",
+      "List of hazardous wastes or hazardous materials used in production",
+      "Description of company disposal methods for hazardous materials, recyclables, etc.",
+      "List of terminated licenses or permits",
+      "List of any superfund exposure",
+      "Copies of notices or filings with the Environmental Protection Agency (EPA)",
+      "List of any environmental investigations and pending litigation",
+      "Notices of violations received in the past three years"
+    ]
+  },
+  {
+    id:"insurance", title:"Insurance",
+    items:[
+      "Current schedule of insurance listing each insurance in force — company, type of coverage, term, insured value/limits and annual premium (incl. Worker's comp, General liability, Personal & property, D&O, E&O, Key-man, Product liability, Vehicle, IP)",
+      "Documentation regarding insurance claims and coverage denials in the last three years",
+      "Insurance costs for the most recent year",
+      "List of all company vehicles and a list of drivers — name and driver's license state and number",
+      "Insurance carrier inspection reports"
+    ]
+  },
+  {
+    id:"property", title:"Real & Personal Property",
+    items:[
+      "List of all real estate — condition of facilities and needed major expenditures to maintain/upgrade",
+      "Real estate valuation reports (including building, inventory, furniture/fixtures)",
+      "Title reports and property surveys",
+      "Vehicle fleet details as applicable",
+      "Major fixed assets and equipment",
+      "Properties held for sale",
+      "Lease/sublease agreements",
+      "Notices / relevant correspondence — side letters or agreements, alleged defaults, renewal of leases, easements/encumbrances",
+      "Contracts for capital improvements"
+    ]
+  },
+  {
+    id:"rd", title:"Research & Development",
+    items:[
+      "R&D organizational overview",
+      "Key personnel",
+      "Roadmaps and development plans",
+      "New product / service pipeline",
+      "Development costs",
+      "List of any patents or trademarks and expiration dates"
+    ]
+  }
+];
+
+const STATUS_OPTIONS = [
+  {v:"none",     label:"Not Started",  cls:""},
+  {v:"progress", label:"In Progress",  cls:"s-progress"},
+  {v:"done",     label:"Provided",     cls:"s-done"},
+  {v:"na",       label:"N/A",          cls:"s-na"}
+];
+
+const STORAGE_KEY = "pando-dd-request-list-v1";
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let state = {
+  client:{ company:"", contact:"", date:"" },
+  responses:{}, // key = "sectionId:itemIndex" => {status, ref, notes}
+  currentView:"summary"
+};
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ state = Object.assign(state, JSON.parse(raw)); }
+  }catch(e){}
+}
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function getResp(sid, idx){
+  return state.responses[sid+":"+idx] || {status:"none", ref:"", notes:""};
+}
+function setResp(sid, idx, key, val){
+  const k = sid+":"+idx;
+  const cur = state.responses[k] || {status:"none", ref:"", notes:""};
+  cur[key] = val;
+  state.responses[k] = cur;
+  saveState();
+}
+
+/* ============================================================
+   STATS
+   ============================================================ */
+function sectionStats(s){
+  let done=0, prog=0, na=0, none=0;
+  s.items.forEach((_, i)=>{
+    const r = getResp(s.id, i);
+    if(r.status==="done") done++;
+    else if(r.status==="progress") prog++;
+    else if(r.status==="na") na++;
+    else none++;
+  });
+  const total = s.items.length;
+  const accounted = done + na; // "complete" includes N/A as a closed-out item
+  return {done, prog, na, none, total, pct: total ? Math.round((accounted/total)*100) : 0};
+}
+function globalStats(){
+  let done=0, prog=0, na=0, none=0, total=0;
+  SECTIONS.forEach(s=>{
+    const st = sectionStats(s);
+    done+=st.done; prog+=st.prog; na+=st.na; none+=st.none; total+=st.total;
+  });
+  return {done, prog, na, none, total, pct: total ? Math.round(((done+na)/total)*100) : 0};
+}
+
+/* ============================================================
+   RENDER — Sidebar
+   ============================================================ */
+function renderSidebar(){
+  const nav = document.getElementById("navList");
+  nav.innerHTML = SECTIONS.map((s, i)=>{
+    const st = sectionStats(s);
+    let pillCls = "";
+    if(st.pct === 100) pillCls = "complete";
+    else if(st.pct > 0) pillCls = "partial";
+    const active = state.currentView === s.id ? "active" : "";
+    const label = String(i+1).padStart(2,"0");
+    return `<div class="nav-item ${active}" onclick="showSection('${s.id}')">
+      <div class="nav-left">
+        <div class="nav-num">${label}</div>
+        <div class="nav-label">${s.title}</div>
+      </div>
+      <div class="nav-pill ${pillCls}">${st.pct}%</div>
+    </div>`;
+  }).join("");
+
+  const sumNav = document.getElementById("navSummary");
+  sumNav.classList.toggle("active", state.currentView === "summary");
+}
+
+/* ============================================================
+   RENDER — Header progress
+   ============================================================ */
+function renderHeader(){
+  const g = globalStats();
+  document.getElementById("globalProgressFill").style.width = g.pct + "%";
+  document.getElementById("globalProgressText").textContent =
+    `${g.done+g.na} of ${g.total} · ${g.pct}%`;
+}
+
+/* ============================================================
+   RENDER — Section view
+   ============================================================ */
+function showSection(sid){
+  state.currentView = sid;
+  saveState();
+  const s = SECTIONS.find(x=>x.id===sid);
+  const idx = SECTIONS.findIndex(x=>x.id===sid);
+  const st = sectionStats(s);
+
+  const prev = idx > 0 ? SECTIONS[idx-1] : null;
+  const next = idx < SECTIONS.length - 1 ? SECTIONS[idx+1] : null;
+
+  const itemsHtml = s.items.map((label, i)=>{
+    const r = getResp(s.id, i);
+    const num = String(i+1).padStart(2,"0");
+    const statusOpts = STATUS_OPTIONS.map(o =>
+      `<option value="${o.v}" ${r.status===o.v?"selected":""}>${o.label}</option>`
+    ).join("");
+    const selCls = STATUS_OPTIONS.find(o=>o.v===r.status)?.cls || "";
+    const cardCls = "status-"+r.status;
+    return `<div class="item ${cardCls}" data-key="${s.id}:${i}">
+      <div class="item-top">
+        <div class="item-num">${num}</div>
+        <div class="item-label">${escapeHtml(label)}</div>
+      </div>
+      <div class="item-controls">
+        <div class="field">
+          <div class="field-label">Status</div>
+          <select class="status-select ${selCls}"
+            onchange="onStatusChange('${s.id}', ${i}, this.value, this)">${statusOpts}</select>
+        </div>
+        <div class="field">
+          <div class="field-label">Document Reference</div>
+          <input type="text" class="text-input"
+            value="${escapeAttr(r.ref)}"
+            placeholder="File name, link, or location"
+            oninput="setResp('${s.id}', ${i}, 'ref', this.value)">
+        </div>
+        <div class="field">
+          <div class="field-label">Notes</div>
+          <textarea class="notes-input" rows="1"
+            placeholder="Comments, caveats, or follow-ups"
+            oninput="setResp('${s.id}', ${i}, 'notes', this.value); autoGrow(this)">${escapeHtml(r.notes)}</textarea>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("main").innerHTML = `
+    <div class="section-view">
+      <div class="section-eyebrow">Section ${String(idx+1).padStart(2,"0")} of ${String(SECTIONS.length).padStart(2,"0")}</div>
+      <h1 class="section-title">${s.title}</h1>
+      <div class="section-sub">${s.items.length} request${s.items.length===1?"":"s"} in this section</div>
+
+      <div class="section-meta">
+        <div class="meta-stat"><div class="meta-dot done"></div><span class="meta-label">Provided</span><span class="meta-value">${st.done}</span></div>
+        <div class="meta-stat"><div class="meta-dot progress"></div><span class="meta-label">In Progress</span><span class="meta-value">${st.prog}</span></div>
+        <div class="meta-stat"><div class="meta-dot na"></div><span class="meta-label">N/A</span><span class="meta-value">${st.na}</span></div>
+        <div class="meta-stat"><div class="meta-dot none"></div><span class="meta-label">Not Started</span><span class="meta-value">${st.none}</span></div>
+        <div class="meta-stat" style="margin-left:auto"><span class="meta-label">Section Complete</span><span class="meta-value">${st.pct}%</span></div>
+      </div>
+
+      <div class="items">${itemsHtml}</div>
+
+      <div class="section-footer">
+        <button class="btn-nav" ${prev?"":"disabled"} onclick="${prev?`showSection('${prev.id}')`:""}">← ${prev?prev.title:"Previous"}</button>
+        <button class="btn-nav" ${next?"":"disabled"} onclick="${next?`showSection('${next.id}')`:""}">${next?next.title:"Next"} →</button>
+      </div>
+    </div>
+  `;
+
+  // auto-grow notes after render
+  document.querySelectorAll(".notes-input").forEach(autoGrow);
+  renderSidebar();
+  renderHeader();
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+/* ============================================================
+   RENDER — Summary view
+   ============================================================ */
+function showSummary(){
+  state.currentView = "summary";
+  saveState();
+  const g = globalStats();
+
+  const rowsHtml = SECTIONS.map((s, i)=>{
+    const st = sectionStats(s);
+    return `<div class="summary-row" onclick="showSection('${s.id}')">
+      <div class="num">${String(i+1).padStart(2,"0")}</div>
+      <div class="name">${s.title}</div>
+      <div class="cell-num ${st.done?"":"zero"}">${st.done}</div>
+      <div class="cell-num ${st.prog?"":"zero"}">${st.prog}</div>
+      <div class="cell-num ${st.na?"":"zero"}">${st.na}</div>
+      <div class="cell-num ${st.none?"":"zero"}">${st.none}</div>
+      <div class="bar-wrap">
+        <div class="bar-track"><div class="bar-fill" style="width:${st.pct}%"></div></div>
+        <div class="bar-pct">${st.pct}%</div>
+      </div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("main").innerHTML = `
+    <div class="cover">
+      <div class="cover-eyebrow">Pando · Pre-Diligence</div>
+      <h1>Due Diligence Request List</h1>
+      <p>A structured intake of the documents, schedules, and information typically required to substantiate enterprise value and prepare for a transaction. Track status, attach references, and capture follow-ups in one place.</p>
+    </div>
+
+    <div class="client-card">
+      <div class="client-card-title">Engagement Details</div>
+      <div class="client-grid">
+        <div class="client-field">
+          <label>Company / Target</label>
+          <input type="text" id="fld-company" value="${escapeAttr(state.client.company)}" placeholder="Company name"
+            oninput="state.client.company=this.value; saveState()">
+        </div>
+        <div class="client-field">
+          <label>Primary Contact</label>
+          <input type="text" id="fld-contact" value="${escapeAttr(state.client.contact)}" placeholder="Name & title"
+            oninput="state.client.contact=this.value; saveState()">
+        </div>
+        <div class="client-field">
+          <label>Date</label>
+          <input type="date" id="fld-date" value="${escapeAttr(state.client.date)}"
+            oninput="state.client.date=this.value; saveState()">
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-kpis">
+      <div class="kpi accent-teal">
+        <div class="kpi-label">Provided</div>
+        <div class="kpi-value">${g.done}</div>
+        <div class="kpi-sub">of ${g.total} total requests</div>
+      </div>
+      <div class="kpi accent-amber">
+        <div class="kpi-label">In Progress</div>
+        <div class="kpi-value">${g.prog}</div>
+        <div class="kpi-sub">items underway</div>
+      </div>
+      <div class="kpi accent-na">
+        <div class="kpi-label">Not Applicable</div>
+        <div class="kpi-value">${g.na}</div>
+        <div class="kpi-sub">items marked N/A</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Overall Complete</div>
+        <div class="kpi-value">${g.pct}%</div>
+        <div class="kpi-sub">${g.done+g.na} of ${g.total} closed out</div>
+      </div>
+    </div>
+
+    <div class="summary-table">
+      <div class="summary-table-header">
+        <div>#</div><div>Section</div>
+        <div style="text-align:center">Done</div>
+        <div style="text-align:center">Prog</div>
+        <div style="text-align:center">N/A</div>
+        <div style="text-align:center">Open</div>
+        <div style="text-align:center">Progress</div>
+      </div>
+      ${rowsHtml}
+    </div>
+
+    <div class="bottom-banner">
+      <div class="left">
+        <div class="bb-mark">P</div>
+        <div class="bb-text">
+          <span>Pando Consulting Group</span>
+          <strong>Exit Readiness · Pre-Diligence · Enterprise Value Optimization</strong>
+        </div>
+      </div>
+      <div style="font-size:11px;color:#8aaccc">Confidential — prepared for engagement use</div>
+    </div>
+  `;
+
+  renderSidebar();
+  renderHeader();
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+/* ============================================================
+   HANDLERS
+   ============================================================ */
+function onStatusChange(sid, idx, val, selEl){
+  setResp(sid, idx, "status", val);
+  // update select color class
+  selEl.classList.remove("s-progress","s-done","s-na");
+  const opt = STATUS_OPTIONS.find(o=>o.v===val);
+  if(opt && opt.cls) selEl.classList.add(opt.cls);
+  // update card border color
+  const card = selEl.closest(".item");
+  card.classList.remove("status-none","status-progress","status-done","status-na");
+  card.classList.add("status-"+val);
+  // update section meta and global
+  const s = SECTIONS.find(x=>x.id===sid);
+  const st = sectionStats(s);
+  const meta = document.querySelector(".section-meta");
+  if(meta){
+    const vals = meta.querySelectorAll(".meta-value");
+    if(vals.length>=5){
+      vals[0].textContent = st.done;
+      vals[1].textContent = st.prog;
+      vals[2].textContent = st.na;
+      vals[3].textContent = st.none;
+      vals[4].textContent = st.pct + "%";
+    }
+  }
+  renderSidebar();
+  renderHeader();
+}
+
+function autoGrow(el){
+  el.style.height = "auto";
+  el.style.height = (el.scrollHeight + 2) + "px";
+}
+
+function resetAll(){
+  if(!confirm("Clear all responses, references, and notes? This cannot be undone.")) return;
+  state.responses = {};
+  state.client = {company:"", contact:"", date:""};
+  saveState();
+  if(state.currentView === "summary") showSummary();
+  else showSection(state.currentView);
+}
+
+function exportJSON(){
+  const data = {
+    exportedAt: new Date().toISOString(),
+    client: state.client,
+    sections: SECTIONS.map(s=>({
+      id:s.id, title:s.title,
+      items: s.items.map((label, i)=>{
+        const r = getResp(s.id, i);
+        return {label, status:r.status, ref:r.ref, notes:r.notes};
+      })
+    }))
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const fname = (state.client.company || "pando-dd").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  a.href = url; a.download = fname + "-request-list.json";
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function escapeAttr(s){
+  return escapeHtml(s || "");
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+loadState();
+if(state.currentView === "summary") showSummary();
+else if(SECTIONS.find(s=>s.id===state.currentView)) showSection(state.currentView);
+else showSummary();
+</script>
+
+</body>
+</html>
